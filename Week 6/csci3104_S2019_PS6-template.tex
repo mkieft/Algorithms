@@ -1,0 +1,268 @@
+\documentclass[12pt]{article}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\parindent}{0in}
+\setlength{\parskip}{\baselineskip}
+
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{hyperref}
+
+
+\begin{document}
+
+\lhead{{\bf CSCI 3104 \\ Problem Set 6} }
+\rhead{Name: \fbox{Maura Kieft} \\ ID: \fbox{103947905} \\ {\bf Profs.\ Grochow \& Layer\\ Spring 2019, CU-Boulder}}
+\renewcommand{\headrulewidth}{0.5pt}
+\phantom{Test}
+
+Quick links: \ref{1a} \ref{1b} \ref{1c} $\qquad$ \ref{2a} \ref{2b} \ref{2c} \ref{2d} $\qquad$ \ref{3a} \ref{3b} \ref{3c} 
+
+\vspace{-3mm}
+\begin{enumerate}
+
+\item %10 points		 
+As a budding expert in algorithms, you decide that your semester service
+project will be to offer free technical interview prep sessions to your fellow
+students. Not surprisingly, you are immediately swamped with appointment
+requests at all different times from students applying many
+different companies, some with more rigorous interviews than others
+(i.e., some will need more help than others). Let $A$ be the set of $n$
+appointment requests. Each appointment $a_i$ in $A$ is a pair 
+$(start_i, end_i)$ of times and $end_i>start_i$. To manage all of these
+requests and to help the most student students that you can, you
+develop a greedy algorithm to help you manage which appointments you can keep
+and which ones you have to drop (you can only tutor one student at a
+time).  
+
+\pagebreak
+\begin{enumerate}
+    \item \label{1a} (2 points) Draw an example with at least 5 appointments where a greedy algorithm
+    that selects the shortest appointment will fail. 
+% YOURE ANSWER HERE
+ \\
+ \\
+ \\If we had 5 appointments {(1,4), (4,8), (3,5), (8,12), (7,9)}
+ \begin{center} 1 ----- 4 4 ----- 8 8 ----- 12 \\ 3 ----- 5  7 -----9 \end{center}
+  (3,5) and (7,9) are shorter intervals which would be chosen for the greedy algorithm that selects the shortest appointment although the optimal solution would be to chose the intervals (1,4), (4,8), and (8,12)
+ 
+
+\pagebreak
+\item \label{1b} (2 points) Draw an example with at least 5 appointments where a greedy algorithm
+    that selects the longest appointment will fail.
+% YOUR ANSWER HERE
+\\
+\\ If we had five appointments {(1,3), (3,5), (5,7), (1,4), (4,7)} \\
+\begin{center} 1 ----- 3 3 ----- 5 5 ----- 7 \\ 1 ------ 4 4 ------ 7 \end{center}
+ The greedy algorithm which selects the longest appointment would chose intervals (1,4) and (4,7) although the optimal solution would be intervals (1,3), (3,5), and (5,7).
+\pagebreak
+\item \label{1c} (6 points) Describe and prove correctness for a greedy algorithm that is guaranteed
+    to choose the subset of appointments that will help the maximum number of
+    students that you help.
+% YOUR ANSWER HERE
+\\
+\\ Idea: Choose appointments in ascending order of end time. Initially, A is the set of all the appointment requests, and S is empty. The algorithm will sort in ascending order by end time. Since A has been sorted, then the first element will have the earliest end time. Add request i to S. Delete all the requests from A that aren't compatible with request i. When A i = n, return the set S as the set of accepted appointments.\\ 
+\textit{Pseudocode:} \\
+appointmentSchedule(A, n)\\
+\hspace*{10mm} Sort(A, A+n, apptComp) \hspace*{10mm} //sorts in ascending order of end time \\
+\hspace*{65mm} //(bool apptComp(a1.end $<$ a2.end))\\
+\hspace*{10mm} S = empty \\ 
+\hspace*{10mm} prevEnd = -1 \hspace*{30mm} //to check if next appt conflicts \\
+\hspace*{10mm} for(i = 1 to n)\\
+\hspace*{15mm} if(A[i].start $>$ prevEnd) \\
+\hspace*{20mm} S.append(A[i]) \hspace*{15mm} //doesn't conflict, add to set \\
+\hspace*{20mm} prevEnd = A[i].end \\
+\hspace*{10mm} return S \hspace*{35mm} //return accepted appointments of set S \\
+
+\textit{Theorem: } \hspace*{2mm} This greedy algorithm provides an optimal solution in choosing the subset of appointments that will help the maximum number of students. \\
+If S is an appointment schedule produced by our greedy algorithm, and S' is an optimal schedule, then for any 1 $\leq$ i $\leq$ $|S|$ we will have f(i,S) $\leq$ f(i,S')\\ 
+\textit{Proof by Induction:}
+Base Case: The first appointment the algorithm selects has to be an appointment with end time no later than any appointment. So, f(1,S) $\leq$ f(1,S'). Assuming the claim holds for some i in 1 $\leq$ i $\leq$ $|S|$, the ith appointment in S ends before the ith appointment in S' since f(i,S) $\leq$ f(i,S'). So, the (i+1)st appointment in S' must start after the ith appointment in S ends. Thus, the (i+1)st appointment in S' must be in A when the algorithm selects its (i+1)st appointment. The algorithm selects the appointment in A with the lowest end time, giving us f(i+1,S) $\leq$ f(i+1,S').Thus, our greedy algorithm chooses the subset of appointments that will help maximize the number of students we can help. \\
+Time complexity is $O(n log n)$ since the appointments are not sorted, and we go through the array to compare. 
+
+
+
+
+\pagebreak
+\end{enumerate}
+
+\item %20 points
+While your algorithm is clearly efficient and can proveably help the most
+students, you begin to receive complaints from students that you didn’t
+help (i.e., their appointment was not part of the optimal solution).
+One of the students even offers to pay extra, which gives you a great
+idea. You will now allow students to make a donation to your favorite
+charity to make it more likely that their job will be selected. Let
+each appointment in this new set of appointments $A$ be a triple 
+ $(start_i, end_i, donation_i)$ of start and end times and donation amounts
+where $end_i>start_i$ and $donationu_i>0$. You now need to update your
+algorithm to handle these donations along with the requested appointment times.
+In this new environment, you are trying to maximize the amount of money
+you raise for your charity.
+\pagebreak
+
+\begin{enumerate}
+    \item \label{2a} (2 points) Give a specific case were your greedy algorithm would fail.
+% YOUR ANSWER HERE
+\\
+\\ If there were two appointments; \\
+\hspace*{10mm} Appointment 1: start = 1, end = 3, donation = 1 \\
+\hspace*{10mm} Appointment 2: start = 2, end = 4, donation = 100 \\
+\\ The greedy algorithm would schedule the first appointment since it has the earliest end time, although the donation is greater for appointment 2. 
+
+\pagebreak
+    \item \label{2b} (5 points) Give a recursive algorithm that would solve this new case.\\ (help from geeksforgeeks.org)\\
+% YOUR ANSWER HERE
+\\
+\textit{Idea:} Sort appointments in ascending order by end time. Represent each appointment by its donation. Choose subset of the values of the max sum of donations so none of the chosen appointments overlap. p(j) = largest i $<$ j such that interval i doesn't overlap with j (its the furthest right interval that is compatible with j).\\ Then, \\
+\hspace*{10mm} a) If the first appointment is scheduled: \\
+\hspace*{20mm}  remove all appointments that overlap \\
+\hspace*{20mm} recurs on remaining appointments.\\
+\hspace*{10mm} b) if the first appointment isn't scheduled: \\
+\hspace*{20mm}  remove first job \\
+\hspace*{20mm}  recurs on remaining appointments. \\
+ Return max of a and b. \\
+ \\
+ \textit{Pseudocode:} \\
+ findMaxRec(A,n) \hspace*{50mm} //assuming A is already sorted \\
+ \hspace*{10mm} if(n==1) return A[n-1].donation \hspace*{10mm} //base case \\
+ \hspace*{10mm} S = empty \\
+ \hspace*{10mm} profitInclude = A[n-1].donation  \hspace*{10mm} //find max when current included\\
+ \hspace*{10mm} i = nonConflict(A,n) \hspace*{30mm}// to find p(j)\\
+ \hspace*{10mm} if(i $!=$ -1) \\
+ \hspace*{15mm} S.append(A[n])\\
+ \hspace*{15mm} profitInclude += findMaxRec(A,i+1)\\
+ \hspace*{10mm} profitExclude = findMaxRec(A, n-1) //find max when current not included \\
+ \hspace*{10mm} totalMax = max(profitInclude, profitExclude) \\
+ return (S, totalMax)\\
+ \\
+ nonConflict(A,i)\\
+ \hspace*{10mm}for(j = i -1; j $\geq$ 0; j--)\\
+ \hspace*{15mm} if(A[j].end $\leq$ A[i-1].start\\
+ \hspace*{20mm} return j\\
+ \hspace*{10mm} return -1 \\
+ \\ If nonConflict always returns a previous appointment it calls findMaxRec twice, making the time complexity $O(n*2^n)$
+ 
+ 
+ 
+
+\pagebreak
+    \item \label{2c} (3 points) Add memoization to this algorithm.\\
+% YOUR ANSWER HERE
+\\
+\\ 
+ \textit{Pseudocode:} \\
+ findMaxRec(A,n)   \\
+ \hspace*{10mm} if(n==1) return A[n-1].donation \\
+ \hspace*{10mm} S[] = empty \\
+ \hspace*{10mm} table = new int[n] \\
+ \hspace*{10mm} table[0] = A[0].donation \\  \\
+ \hspace*{10mm} //memoize entries using recursion \\
+ \hspace*{10mm} for(i = 1; i $<$ n; i++) \\
+ \hspace*{15mm} profitInclude = A[i].donation \\ \\
+ \hspace*{10mm} p = nonConflict(A,i)\\
+ \hspace*{10mm} if(l $!=$ -1) \\
+ \hspace*{15mm} profitInclude += table[l];\\
+ \hspace*{15mm} S.append(A[i]\\ \\
+ \hspace*{10mm} table[i] = max(profitInclude, table[i-1])\\
+ result = table[n-1]\\
+ return(S, result)\\
+ 
+
+\pagebreak
+    \item \label{2d} (10 points) Give a bottom-up dynamic programming algorithm.\\
+% YOUR ANSWER HERE
+\\
+\textit{Idea:} Sort jobs ascending end times. For each i in A from 1 to n, find the max value of the appointments from the subsequence of appointments [0...i] by comparing the inclusion of appointment i to the schedule to the exclusion of appointment i to the schedule and taking the max of these. Use binary search to find the latest appointment which does not conflict\\
+\textit{Pseudocode:} \\
+findMax(A , n) \\
+\hspace*{10mm} profit[] = new int[n+1]\\
+\hspace*{10mm} q[] = new int[n]\\
+\hspace*{10mm} Sort(A, A+n, apptComp) \\
+\hspace*{10mm} q[0] = -1 \hspace*{10mm} //find p(j) \\
+\hspace*{10mm}for (i = 1; i $<$ n; i++) \\
+\hspace*{15mm} q[i] = binarySearchCompatible(A, i)\\
+\\
+\hspace*{10mm} profit[0] = 0\\
+\hspace*{10mm} for(j = 1; j $\leq$ n; j++)\\
+\hspace*{15mm} profitExclude = profit[j-1]\\
+\hspace*{15mm} profitInclude = A[j-1].donation\\
+\hspace*{15mm} if(q[j-1] != -1)\\
+\hspace*{20mm} profitInclude += profit[q[j-1]+1]\\
+\hspace*{15mm} profit[j] = max(profitInclude, profitExclude)\\
+\hspace*{10mm} return profit[n] \\
+\\
+binarySearchCompatible(A,i) \\
+\hspace*{10mm} low = 0, high = i -1 \\
+\hspace*{10mm} while( low $\leq$ high) \\
+\hspace*{15mm} mid = (low + high) / 2 \\
+\hspace*{15mm} if(A[mid].end $\leq$ A[i].start)\\
+\hspace*{20mm} if(A[mid+1].end $\leq$ A[i].start) \\
+\hspace*{25mm} low = mid + 1 \\
+\hspace*{20mm} else \\
+\hspace*{25mm} return mid \\
+\hspace*{15mm} else \\
+\hspace*{20mm} high = mid -1 \\
+\hspace*{10mm} return -1
+\\
+\\Since this algorithm uses binary search, the time complexity is O(n log n) 
+
+
+\pagebreak
+\end{enumerate}
+
+\item (30 pts) 
+The cashier's (greedy) algorithm for making change doesn't handle arbitrary
+denominations optimally. In this problem you'll develop a dynamic
+programming solution which does, but with a slight twist. Suppose we
+have at our disposal an arbitrary number of \emph{cursed} coins of each
+denomination $d_1, d_2, \dotsc, d_k$, with $d_1 > d_2 > \dotsc > d_k$,
+and we need to provide $n$ cents in change. We will always have
+$d_k=1$, so that we are assured we can make change for any value of
+$n$. The curse on the coins is that in any one exchange between people,
+with the exception of $i=k-1$, if coins of denomination $d_i$ are used,
+then coins of denomination $d_{i+1}$ \emph{cannot} be used. Our goal is
+to make change using the minimal number of these cursed coins (in a
+single exchange, i.e., the curse applies).
+\pagebreak
+	
+\begin{enumerate}
+\item \label{3a} (10 points) For $i \in \{1,\dotsc,k\}$, $n \in \mathbb{N}$, and $b \in \{0,1\}$, let
+    $C(i,n,b)$ denote the number of cursed coins needed to make $n$ cents in
+    change using only the last $i$ denominations $d_{k-i+1}, d_{k-i+2}, \dotsc, d_k$,
+    where $d_{k-i+2}$ is allowed to be used if and only if $i \leq 2$ or
+    $b=0$. That is, $b$ is a Boolean ``flag'' variable indicating whether
+    we are excluding the next denomination $d_{k-i+2}$ or not ($b=1$ means exclude
+    it).Write down a recurrence relation for $C$ and prove it is
+    correct. Be sure to include the base case. \\
+% YOUR ANSWER HERE
+\\
+I don't know.
+\pagebreak
+	
+\item \label{3b} (10 points) Based on your recurrence relation, describe the order in
+    which a dynamic programming table for $C(i,n,b)$ should be filled in.\\
+% YOUR ANSWER HERE
+\\ I don't know.
+\pagebreak
+	
+\item \label{3c} (10 points) Based on your description in part (b), write down pseudocode for a
+    dynamic programming solution to this problem, and give a $\Theta$ bound on
+    its running time (remember, this requires proving both an upper
+    \emph{and} a lower bound).\\
+% YOUR ANSWER HERE
+\\ I don't know.
+\pagebreak
+\end{enumerate}
+	
+	
+
+\end{enumerate}
+
+
+\end{document}
+
+

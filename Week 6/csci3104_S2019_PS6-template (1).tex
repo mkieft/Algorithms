@@ -1,0 +1,136 @@
+\documentclass[12pt]{article}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\parindent}{0in}
+\setlength{\parskip}{\baselineskip}
+
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{hyperref}
+
+
+\begin{document}
+
+\lhead{{\bf CSCI 3104 \\ Problem Set 6} }
+\rhead{Name: \fbox{\phantom{This is a really long name}} \\ ID: \fbox{\phantom{This is a student ID}} \\ {\bf Profs.\ Grochow \& Layer\\ Spring 2019, CU-Boulder}}
+\renewcommand{\headrulewidth}{0.5pt}
+\phantom{Test}
+
+Quick links: \ref{1a} \ref{1b} \ref{1c} $\qquad$ \ref{2a} \ref{2b} \ref{2c} \ref{2d} $\qquad$ \ref{3a} \ref{3b} \ref{3c} 
+
+\vspace{-3mm}
+\begin{enumerate}
+
+\item %10 points		 
+As a budding expert in algorithms, you decide that your semester service
+project will be to offer free technical interview prep sessions to your fellow
+students. Not surprisingly, you are immediately swamped with appointment
+requests at all different times from students applying many
+different companies, some with more rigorous interviews than others
+(i.e., some will need more help than others). Let $A$ be the set of $n$
+appointment requests. Each appointment $a_i$ in $A$ is a pair 
+$(start_i, end_i)$ of times and $end_i>start_i$. To manage all of these
+requests and to help the most student students that you can, you
+develop a greedy algorithm to help you manage which appointments you can keep
+and which ones you have to drop (you can only tutor one student at a
+time).  
+
+\pagebreak
+\begin{enumerate}
+    \item \label{1a} (2 points) Draw an example with at least 5 appointments where a greedy algorithm
+    that selects the shortest appointment will fail.
+\n If we had 5 appointments {(1,4),(4,8),(3,5),(8,12),(7,9)} \n
+
+\pagebreak
+\item \label{1b} (2 points) Draw an example with at least 5 appointments where a greedy algorithm
+    that selects the longest appointment will fail.
+% YOUR ANSWER HERE
+\pagebreak
+\item \label{1c} (6 points) Describe and prove correctness for a greedy algorithm that is guaranteed
+    to choose the subset of appointments that will help the maximum number of
+    students that you help.
+% YOUR ANSWER HERE
+\pagebreak
+\end{enumerate}
+
+\item %20 points
+While your algorithm is clearly efficient and can proveably help the most
+students, you begin to receive complaints from students that you didn’t
+help (i.e., their appointment was not part of the optimal solution).
+One of the students even offers to pay extra, which gives you a great
+idea. You will now allow students to make a donation to your favorite
+charity to make it more likely that their job will be selected. Let
+each appointment in this new set of appointments $A$ be a triple 
+ $(start_i, end_i, donation_i)$ of start and end times and donation amounts
+where $end_i>start_i$ and $donationu_i>0$. You now need to update your
+algorithm to handle these donations along with the requested appointment times.
+In this new environment, you are trying to maximize the amount of money
+you raise for your charity.
+\pagebreak
+
+\begin{enumerate}
+    \item \label{2a} (2 points) Give a specific case were your greedy algorithm would fail.
+% YOUR ANSWER HERE
+\pagebreak
+    \item \label{2b} (5 points) Give a recursive algorithm that would solve this new case.
+% YOUR ANSWER HERE
+\pagebreak
+    \item \label{2c} (3 points) Add memoization to this algorithm.
+% YOUR ANSWER HERE
+\pagebreak
+    \item \label{2d} (10 points) Give a bottom-up dynamic programming algorithm.
+% YOUR ANSWER HERE
+\pagebreak
+\end{enumerate}
+
+\item (30 pts) 
+The cashier's (greedy) algorithm for making change doesn't handle arbitrary
+denominations optimally. In this problem you'll develop a dynamic
+programming solution which does, but with a slight twist. Suppose we
+have at our disposal an arbitrary number of \emph{cursed} coins of each
+denomination $d_1, d_2, \dotsc, d_k$, with $d_1 > d_2 > \dotsc > d_k$,
+and we need to provide $n$ cents in change. We will always have
+$d_k=1$, so that we are assured we can make change for any value of
+$n$. The curse on the coins is that in any one exchange between people,
+with the exception of $i=k-1$, if coins of denomination $d_i$ are used,
+then coins of denomination $d_{i+1}$ \emph{cannot} be used. Our goal is
+to make change using the minimal number of these cursed coins (in a
+single exchange, i.e., the curse applies).
+\pagebreak
+	
+\begin{enumerate}
+\item \label{3a} (10 points) For $i \in \{1,\dotsc,k\}$, $n \in \mathbb{N}$, and $b \in \{0,1\}$, let
+    $C(i,n,b)$ denote the number of cursed coins needed to make $n$ cents in
+    change using only the last $i$ denominations $d_{k-i+1}, d_{k-i+2}, \dotsc, d_k$,
+    where $d_{k-i+2}$ is allowed to be used if and only if $i \leq 2$ or
+    $b=0$. That is, $b$ is a Boolean ``flag'' variable indicating whether
+    we are excluding the next denomination $d_{k-i+2}$ or not ($b=1$ means exclude
+    it).Write down a recurrence relation for $C$ and prove it is
+    correct. Be sure to include the base case.
+% YOUR ANSWER HERE
+\pagebreak
+	
+\item \label{3b} (10 points) Based on your recurrence relation, describe the order in
+    which a dynamic programming table for $C(i,n,b)$ should be filled in.
+% YOUR ANSWER HERE
+\pagebreak
+	
+\item \label{3c} (10 points) Based on your description in part (b), write down pseudocode for a
+    dynamic programming solution to this problem, and give a $\Theta$ bound on
+    its running time (remember, this requires proving both an upper
+    \emph{and} a lower bound).
+% YOUR ANSWER HERE
+\pagebreak
+\end{enumerate}
+	
+	
+
+\end{enumerate}
+
+
+\end{document}
+
+
